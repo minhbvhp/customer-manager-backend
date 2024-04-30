@@ -18,7 +18,7 @@ export class UsersService {
     return users;
   }
 
-  async getUserById(id: number) {
+  async getUserById(id: string) {
     const user = await this.usersRepository.findOne({
       where: {
         id: id,
@@ -61,7 +61,7 @@ export class UsersService {
     }
   }
 
-  async updateUser(id: number, updateUserDto: UpdateUserDto) {
+  async updateUser(id: string, updateUserDto: UpdateUserDto) {
     const existedUser = await this.usersRepository.findOne({
       where: {
         id: id,
@@ -74,7 +74,7 @@ export class UsersService {
     }
   }
 
-  async deleteUser(id: number) {
+  async deleteUser(id: string) {
     const existedUser = await this.usersRepository.findOne({
       where: {
         id: id,

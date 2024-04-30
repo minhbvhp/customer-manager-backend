@@ -28,7 +28,7 @@ export class UsersController {
 
   @Get(':id')
   async getUserById(@Param('id') id: string): Promise<User> {
-    const user = await this.usersService.getUserById(Number(id));
+    const user = await this.usersService.getUserById(id);
 
     if (!user) {
       throw new NotFoundException(`Người dùng không tồn tại`);
@@ -52,10 +52,7 @@ export class UsersController {
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    const updatedUser = await this.usersService.updateUser(
-      Number(id),
-      updateUserDto,
-    );
+    const updatedUser = await this.usersService.updateUser(id, updateUserDto);
 
     if (!updatedUser) {
       throw new NotFoundException(`Người dùng không tồn tại`);
@@ -65,7 +62,7 @@ export class UsersController {
 
   @Delete(':id')
   async deleteUser(@Param('id') id: string) {
-    const deletedUser = await this.usersService.deleteUser(Number(id));
+    const deletedUser = await this.usersService.deleteUser(id);
 
     if (!deletedUser) {
       throw new NotFoundException(`Người dùng không tồn tại`);
