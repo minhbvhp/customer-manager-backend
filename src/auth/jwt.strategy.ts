@@ -1,16 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import User from '../users/entities/user.entity';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
-  ) {
+  constructor(private usersService: UsersService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -18,7 +13,24 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
+  /**
+   *
+   * @param payload{sub, email, iat, exp}
+   *
+   */
+
   async validate(payload: any) {
-    return { userId: payload.sub, userEmail: payload.email };
+    console.log(payload);
+    //check id existed
+    const user = await this.usersService.getUserById(payload?.id);
+
+    //check email match id
+    if (user?.email === payload.email) {
+      return 'OK';
+    }
+
+    //check jwt token expired
+    //check refresh token expired
+    return 'OK';
   }
 }
