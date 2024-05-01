@@ -11,8 +11,8 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
-import { SignUpDto } from './dto/signup.dto';
 import { Public } from 'src/auth/auth.decorators';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -20,8 +20,10 @@ export class AuthController {
 
   @Post('/signup')
   @Public()
-  async signUp(@Body() signUpDto: SignUpDto): Promise<{ token: string }> {
-    const newUser = await this.authService.signUp(signUpDto);
+  async signUp(
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<{ token: string }> {
+    const newUser = await this.authService.signUp(createUserDto);
 
     if (!newUser) {
       throw new ConflictException(`Người dùng này đã có rồi`);

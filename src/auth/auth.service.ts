@@ -1,57 +1,31 @@
 import { Injectable } from '@nestjs/common';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
-import { SignUpDto } from './dto/signup.dto';
-import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import User from '../users/entities/user.entity';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    private usersService: UsersService,
     private jwtService: JwtService,
   ) {}
 
-  async signUp(signUpDto: SignUpDto): Promise<{ token: string }> {
-    const existedUser = await this.usersRepository.findOne({
-      where: {
-        email: signUpDto.email,
-      },
-    });
+  async signUp(createUserDto: CreateUserDto): Promise<{ token: string }> {
+    const newUser = await this.usersService.createUser(createUserDto);
 
-    if (!existedUser) {
-      try {
-        const { name, email, password } = signUpDto;
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await this.usersRepository.create({
-          name,
-          email,
-          password: hashedPassword,
-        });
+    const token = this.jwtService.sign({ id: newUser?.id });
 
-        await this.usersRepository.insert(user);
-
-        const token = this.jwtService.sign({ id: user.id });
-
-        return { token };
-      } catch (error) {
-        console.log(error);
-        return null;
-      }
-    }
+    return { token };
   }
 
   async login(loginDto: LoginDto): Promise<{ token: string }> {
     const { email, password } = loginDto;
 
-    const user = await this.usersRepository.findOne({
-      where: {
-        email: email,
-      },
-    });
+    const user = await this.usersService.getUserByEmail(email);
 
     if (!user) {
       return null;
@@ -72,4 +46,8 @@ export class AuthService {
 
     return { token };
   }
+
+  // async validateUser(username: string, password: string) : Promise<any> {
+  //   const user = await this.usersService.findOne(usernam)
+  // }
 }
