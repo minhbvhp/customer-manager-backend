@@ -20,17 +20,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    */
 
   async validate(payload: any) {
-    console.log(payload);
     //check id existed
-    const user = await this.usersService.getUserById(payload?.id);
+    const user = await this.usersService.getUserById(payload?.sub);
 
     //check email match id
     if (user?.email === payload.email) {
-      return 'OK';
+      return { userId: payload.sub, email: payload.email };
     }
 
     //check jwt token expired
     //check refresh token expired
-    return 'OK';
   }
 }

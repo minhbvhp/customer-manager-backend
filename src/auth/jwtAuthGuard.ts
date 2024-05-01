@@ -32,6 +32,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         'Cần đăng nhập mới thực hiện được chức năng này',
       );
     }
+
     return user;
   }
 }
