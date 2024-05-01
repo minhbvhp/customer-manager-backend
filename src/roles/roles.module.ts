@@ -16,11 +16,13 @@ export class RolesModule {
 
   async onModuleInit() {
     const adminRoles = {
+      id: 1,
       role: 'admin',
       description: 'Administrator',
     };
 
     const userRoles = {
+      id: 2,
       role: 'user',
       description: 'Normal user',
     };

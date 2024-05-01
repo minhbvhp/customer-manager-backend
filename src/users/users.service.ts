@@ -37,6 +37,9 @@ export class UsersService {
       where: {
         email: email,
       },
+      relations: {
+        role: true,
+      },
     });
 
     if (user) {

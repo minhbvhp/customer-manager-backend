@@ -19,6 +19,9 @@ class User {
 
   @ManyToOne(() => Role, (role) => role.users)
   role: Role;
+
+  @Column({ default: 2 })
+  roleId: number;
 }
 
 export default User;

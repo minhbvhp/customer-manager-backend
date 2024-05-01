@@ -25,7 +25,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
     //check email match id
     if (user?.email === payload.email) {
-      return { userId: payload.sub, email: payload.email };
+      return { userId: payload.sub, email: payload.email, role: payload.role };
     }
 
     //check jwt token expired

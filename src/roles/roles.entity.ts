@@ -6,10 +6,10 @@ class Role {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   role: string;
 
-  @Column({ unique: true })
+  @Column()
   description: string;
 
   @OneToMany(() => User, (user) => user.role)
