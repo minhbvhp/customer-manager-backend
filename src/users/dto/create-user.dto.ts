@@ -4,17 +4,24 @@ import {
   IsStrongPassword,
   IsString,
 } from 'class-validator';
+import {
+  EMAIL_MUST_NOT_EMPTY,
+  EMAIL_MUST_VALID,
+  NAME_MUST_NOT_EMPTY,
+  PASSWORD_MUST_NOT_EMPTY,
+  PASSWORD_NOT_STRONG,
+} from 'src/utils/messageConstants';
 
 export class CreateUserDto {
-  @IsNotEmpty({ message: 'Tên không được bỏ trống' })
+  @IsNotEmpty({ message: NAME_MUST_NOT_EMPTY })
   @IsString()
   name: string;
 
-  @IsNotEmpty({ message: 'Email không được bỏ trống' })
-  @IsEmail({}, { message: 'Email không đúng định dạng' })
+  @IsNotEmpty({ message: EMAIL_MUST_NOT_EMPTY })
+  @IsEmail({}, { message: EMAIL_MUST_VALID })
   email: string;
 
-  @IsNotEmpty({ message: 'Mật khẩu không được bỏ trống' })
+  @IsNotEmpty({ message: PASSWORD_MUST_NOT_EMPTY })
   @IsStrongPassword(
     {
       minLength: 6,
@@ -24,8 +31,7 @@ export class CreateUserDto {
       minSymbols: 1,
     },
     {
-      message:
-        'Mật khẩu không đủ mạnh: cần tối thiểu 6 ký tự, 1 chữ hoa, 1 chữ thường, 1 số, 1 ký tự đặc biệt',
+      message: PASSWORD_NOT_STRONG,
     },
   )
   password: string;

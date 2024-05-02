@@ -2,15 +2,21 @@ import { IsNotEmpty, IsEmail, IsStrongPassword } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateUserDto } from './create-user.dto';
 import { Exclude } from 'class-transformer';
+import {
+  NAME_MUST_NOT_EMPTY,
+  PASSWORD_MUST_NOT_EMPTY,
+  PASSWORD_NOT_STRONG,
+  ROLE_MUST_NOT_EMPTY,
+} from 'src/utils/messageConstants';
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
   @Exclude()
   email?: string;
 
-  @IsNotEmpty({ message: 'Tên không được bỏ trống' })
+  @IsNotEmpty({ message: NAME_MUST_NOT_EMPTY })
   name: string;
 
-  @IsNotEmpty({ message: 'Mật khẩu không được bỏ trống' })
+  @IsNotEmpty({ message: PASSWORD_MUST_NOT_EMPTY })
   @IsStrongPassword(
     {
       minLength: 6,
@@ -20,9 +26,11 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
       minSymbols: 1,
     },
     {
-      message:
-        'Mật khẩu không đủ mạnh: cần tối thiểu 6 ký tự, 1 chữ hoa, 1 chữ thường, 1 số, 1 ký tự đặc biệt',
+      message: PASSWORD_NOT_STRONG,
     },
   )
   password: string;
+
+  @IsNotEmpty({ message: ROLE_MUST_NOT_EMPTY })
+  roleId: number;
 }

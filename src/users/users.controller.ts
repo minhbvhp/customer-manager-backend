@@ -14,7 +14,10 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import User from './entities/user.entity';
-import { AuthGuard } from '@nestjs/passport';
+import {
+  USER_ALREADY_EXISTED,
+  USER_NOT_FOUND,
+} from 'src/utils/messageConstants';
 
 @Controller('users')
 export class UsersController {
@@ -31,7 +34,7 @@ export class UsersController {
     const user = await this.usersService.getUserById(id);
 
     if (!user) {
-      throw new NotFoundException(`Người dùng không tồn tại`);
+      throw new NotFoundException(USER_NOT_FOUND);
     }
     return user;
   }
@@ -41,7 +44,7 @@ export class UsersController {
     const newUser = await this.usersService.createUser(createUserDto);
 
     if (!newUser) {
-      throw new ConflictException(`Người dùng này đã có rồi`);
+      throw new ConflictException(USER_ALREADY_EXISTED);
     }
 
     return newUser;
@@ -55,7 +58,7 @@ export class UsersController {
     const updatedUser = await this.usersService.updateUser(id, updateUserDto);
 
     if (!updatedUser) {
-      throw new NotFoundException(`Người dùng không tồn tại`);
+      throw new NotFoundException(USER_NOT_FOUND);
     }
     return updatedUser;
   }
@@ -65,7 +68,7 @@ export class UsersController {
     const deletedUser = await this.usersService.deleteUser(id);
 
     if (!deletedUser) {
-      throw new NotFoundException(`Người dùng không tồn tại`);
+      throw new NotFoundException(USER_NOT_FOUND);
     }
 
     return deletedUser;

@@ -4,6 +4,7 @@ import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
+import { NEW_USER_CREATED } from 'src/utils/messageConstants';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +20,7 @@ export class AuthService {
       return null;
     }
 
-    return { result: 'Đã tạo người dùng mới' };
+    return { result: NEW_USER_CREATED };
   }
 
   async login(loginDto: LoginDto): Promise<{ token: string }> {

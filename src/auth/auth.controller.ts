@@ -10,6 +10,10 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { Public } from 'src/auth/auth.decorators';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import {
+  EMAIL_OR_PASSWORD_WRONG,
+  USER_ALREADY_EXISTED,
+} from 'src/utils/messageConstants';
 
 @Controller('auth')
 export class AuthController {
@@ -23,7 +27,7 @@ export class AuthController {
     const newUser = await this.authService.signUp(createUserDto);
 
     if (!newUser) {
-      throw new ConflictException(`Người dùng này đã có rồi`);
+      throw new ConflictException(USER_ALREADY_EXISTED);
     }
 
     return newUser;
@@ -35,7 +39,7 @@ export class AuthController {
     const loginUser = await this.authService.login(loginDto);
 
     if (!loginUser) {
-      throw new NotFoundException(`Email hoặc mật khẩu không chính xác`);
+      throw new NotFoundException(EMAIL_OR_PASSWORD_WRONG);
     }
     return loginUser;
   }

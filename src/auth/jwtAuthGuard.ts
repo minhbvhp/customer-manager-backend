@@ -6,6 +6,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { IS_PUBLIC_KEY } from 'src/auth/auth.decorators';
+import { THIS_FEATURE_NEED_LOGIN } from 'src/utils/messageConstants';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -28,9 +29,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
   handleRequest(err, user, info) {
     if (err || !user) {
-      throw new UnauthorizedException(
-        'Cần đăng nhập mới thực hiện được chức năng này',
-      );
+      throw new UnauthorizedException(THIS_FEATURE_NEED_LOGIN);
     }
 
     return user;
