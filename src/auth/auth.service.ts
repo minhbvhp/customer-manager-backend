@@ -12,12 +12,14 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signUp(createUserDto: CreateUserDto): Promise<{ token: string }> {
+  async signUp(createUserDto: CreateUserDto): Promise<{ result: string }> {
     const newUser = await this.usersService.createUser(createUserDto);
 
-    const token = this.jwtService.sign({ id: newUser?.id });
+    if (!newUser) {
+      return null;
+    }
 
-    return { token };
+    return { result: 'Đã tạo người dùng mới' };
   }
 
   async login(loginDto: LoginDto): Promise<{ token: string }> {

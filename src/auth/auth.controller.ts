@@ -19,7 +19,7 @@ export class AuthController {
   @Public()
   async signUp(
     @Body() createUserDto: CreateUserDto,
-  ): Promise<{ token: string }> {
+  ): Promise<{ result: string }> {
     const newUser = await this.authService.signUp(createUserDto);
 
     if (!newUser) {

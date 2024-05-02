@@ -58,19 +58,19 @@ export class UsersService {
 
     if (!existedUser) {
       try {
-        const { name, email, password } = createUserDto;
-
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
 
         const newUser = await this.usersRepository.create({
-          name,
-          email,
+          name: createUserDto.name,
+          email: createUserDto.email,
           password: hashedPassword,
         });
 
         await this.usersRepository.insert(newUser);
 
-        return newUser;
+        const { password, ...result } = newUser;
+
+        return result;
       } catch (error) {
         console.log(error);
         return null;
