@@ -1,12 +1,10 @@
 import Role from 'src/roles/roles.entity';
-import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 class User {
-  @PrimaryColumn({
-    type: 'varchar',
-  })
-  id: string = crypto.randomUUID();
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   name: string;

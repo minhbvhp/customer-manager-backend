@@ -18,7 +18,10 @@ import {
   USER_ALREADY_EXISTED,
   USER_NOT_FOUND,
 } from 'src/utils/messageConstants';
+import { Roles } from 'src/roles/roles.decorator';
+import { RoleEnum } from 'src/roles/role.enum';
 
+@Roles(RoleEnum.Admin)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

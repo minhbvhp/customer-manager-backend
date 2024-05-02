@@ -2,11 +2,18 @@ import { Module } from '@nestjs/common';
 import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import Role from 'src/roles/roles.entity';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from 'src/roles/role.guard';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Role])],
   // controllers: [UsersController],
-  // providers: [UsersService],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class RolesModule {
   constructor(
