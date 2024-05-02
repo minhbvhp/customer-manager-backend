@@ -56,8 +56,8 @@ export class AuthService {
     if (!isPasswordMatched) {
       return null;
     }
-
     const { password, ...result } = user;
+
     return result;
   }
 }

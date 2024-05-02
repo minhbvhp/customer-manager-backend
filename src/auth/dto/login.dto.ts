@@ -6,11 +6,11 @@ import {
 } from 'src/utils/messageConstants';
 
 export class LoginDto {
-  @IsNotEmpty({ message: EMAIL_MUST_NOT_EMPTY })
   @IsEmail({}, { message: EMAIL_MUST_VALID })
+  @IsNotEmpty({ message: EMAIL_MUST_NOT_EMPTY })
   email: string;
 
-  @IsNotEmpty({ message: PASSWORD_MUST_NOT_EMPTY })
   @IsString()
+  @IsNotEmpty({ message: PASSWORD_MUST_NOT_EMPTY })
   password: string;
 }

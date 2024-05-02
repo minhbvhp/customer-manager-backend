@@ -13,15 +13,14 @@ import {
 } from 'src/utils/messageConstants';
 
 export class CreateUserDto {
-  @IsNotEmpty({ message: NAME_MUST_NOT_EMPTY })
   @IsString()
+  @IsNotEmpty({ message: NAME_MUST_NOT_EMPTY })
   name: string;
 
-  @IsNotEmpty({ message: EMAIL_MUST_NOT_EMPTY })
   @IsEmail({}, { message: EMAIL_MUST_VALID })
+  @IsNotEmpty({ message: EMAIL_MUST_NOT_EMPTY })
   email: string;
 
-  @IsNotEmpty({ message: PASSWORD_MUST_NOT_EMPTY })
   @IsStrongPassword(
     {
       minLength: 6,
@@ -34,5 +33,6 @@ export class CreateUserDto {
       message: PASSWORD_NOT_STRONG,
     },
   )
+  @IsNotEmpty({ message: PASSWORD_MUST_NOT_EMPTY })
   password: string;
 }

@@ -40,6 +40,7 @@ export class UsersService {
       relations: {
         role: true,
       },
+      select: ['id', 'name', 'email', 'password', 'role', 'roleId'],
     });
 
     if (user) {
@@ -68,7 +69,6 @@ export class UsersService {
 
         await this.usersRepository.insert(newUser);
 
-        console.log('new user from user service: ', newUser);
         const { password, ...result } = newUser;
 
         return result;
@@ -86,15 +86,12 @@ export class UsersService {
       },
     });
 
-    console.log('existedUser from user service: ', existedUser);
-
     if (existedUser) {
       const updatedUser = await this.usersRepository.create({
         name: updateUserDto.name,
         roleId: updateUserDto.roleId,
       });
 
-      console.log('updatedUser from user service: ', updatedUser);
       await this.usersRepository.update(existedUser, updatedUser);
 
       return updatedUser;
