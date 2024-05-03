@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { NEW_USER_CREATED } from 'src/utils/messageConstants';
 import { ConfigService } from '@nestjs/config';
+import { UUID } from 'crypto';
 
 @Injectable()
 export class AuthService {
@@ -43,10 +44,24 @@ export class AuthService {
         payload.role,
       );
 
+      await this.updateRefreshToken(payload.sub, tokens.refreshToken);
+
       return tokens;
     }
 
     return null;
+  }
+
+  async logout(userId: string) {
+    const user = await this.usersService.updateRefreshToken(userId, null);
+    console.log(user);
+    return user;
+  }
+
+  async updateRefreshToken(userId: string, refreshToken: string) {
+    const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+
+    await this.usersService.updateRefreshToken(userId, hashedRefreshToken);
   }
 
   async getTokens(userId: string, email: string, role: string) {

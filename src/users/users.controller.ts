@@ -20,6 +20,7 @@ import {
 } from 'src/utils/messageConstants';
 import { Roles } from 'src/roles/roles.decorator';
 import { RoleEnum } from 'src/roles/role.enum';
+import { UUID } from 'crypto';
 
 @Roles(RoleEnum.Admin)
 @Controller('users')
@@ -34,6 +35,7 @@ export class UsersController {
 
   @Get(':id')
   async getUserById(@Param('id') id: string): Promise<User> {
+    console.log('Controller id: ', id);
     const user = await this.usersService.getUserById(id);
 
     if (!user) {

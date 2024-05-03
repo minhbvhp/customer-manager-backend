@@ -1,3 +1,4 @@
+import { UUID } from 'crypto';
 import Role from 'src/roles/roles.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 

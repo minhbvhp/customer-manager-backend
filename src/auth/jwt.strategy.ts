@@ -21,22 +21,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    */
 
   async validate(payload: any) {
-    const user = await this.usersService.getUserById(payload?.sub);
-
-    //check id existed
-    if (!user) {
-      throw new UnauthorizedException(THIS_FEATURE_NEED_LOGIN);
-    }
-
-    //check email match id
-    if (user?.email !== payload.email) {
-      throw new UnauthorizedException(THIS_FEATURE_NEED_LOGIN);
-    }
-
-    //check jwt token expired
-
-    //check refresh token expired
-
     return { userId: payload.sub, email: payload.email, role: payload.role };
   }
 }

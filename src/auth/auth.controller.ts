@@ -3,6 +3,7 @@ import {
   Get,
   Post,
   Body,
+  Request,
   ConflictException,
   NotFoundException,
 } from '@nestjs/common';
@@ -19,7 +20,7 @@ import {
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('/signup')
+  @Post('signup')
   @Public()
   async signUp(
     @Body() createUserDto: CreateUserDto,
@@ -33,7 +34,7 @@ export class AuthController {
     return newUser;
   }
 
-  @Post('/login')
+  @Post('login')
   @Public()
   async login(
     @Body() loginDto: LoginDto,
@@ -44,5 +45,10 @@ export class AuthController {
       throw new NotFoundException(EMAIL_OR_PASSWORD_WRONG);
     }
     return loginUser;
+  }
+
+  @Get('logout')
+  async logout(@Request() req) {
+    return this.authService.logout(req.user['userId']);
   }
 }

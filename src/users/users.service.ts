@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import User from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
+import { UUID } from 'crypto';
 
 @Injectable()
 export class UsersService {
@@ -18,47 +19,57 @@ export class UsersService {
     return users;
   }
 
-  async getUserById(id: string) {
-    const user = await this.usersRepository.findOne({
-      where: {
-        id: id,
-      },
-    });
+  async getUserById(userId: string) {
+    console.log('Get id first time: ', userId);
+    try {
+      console.log('Get id second time: ', userId);
+      const user = await this.usersRepository.findOne({
+        where: {
+          id: userId,
+        },
+      });
 
-    if (user) {
-      return user;
+      if (user) {
+        return user;
+      }
+    } catch (error) {
+      return null;
     }
 
     return null;
   }
 
   async getUserByEmail(email: string) {
-    const user = await this.usersRepository.findOne({
-      where: {
-        email: email,
-      },
-      relations: {
-        role: true,
-      },
-      select: ['id', 'name', 'email', 'password', 'role', 'roleId'],
-    });
+    try {
+      const user = await this.usersRepository.findOne({
+        where: {
+          email: email,
+        },
+        relations: {
+          role: true,
+        },
+        select: ['id', 'name', 'email', 'password', 'role', 'roleId'],
+      });
 
-    if (user) {
-      return user;
+      if (user) {
+        return user;
+      }
+    } catch (error) {
+      return null;
     }
 
     return null;
   }
 
   async createUser(createUserDto: CreateUserDto) {
-    const existedUser = await this.usersRepository.findOne({
-      where: {
-        email: createUserDto.email,
-      },
-    });
+    try {
+      const existedUser = await this.usersRepository.findOne({
+        where: {
+          email: createUserDto.email,
+        },
+      });
 
-    if (!existedUser) {
-      try {
+      if (!existedUser) {
         const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
 
         const newUser = await this.usersRepository.create({
@@ -72,46 +83,80 @@ export class UsersService {
         const { password, ...result } = newUser;
 
         return result;
-      } catch (error) {
-        console.log(error);
-        return null;
       }
-    }
-  }
-
-  async updateUser(id: string, updateUserDto: UpdateUserDto) {
-    const existedUser = await this.usersRepository.findOne({
-      where: {
-        id: id,
-      },
-    });
-
-    if (existedUser) {
-      const updatedUser = await this.usersRepository.create({
-        name: updateUserDto.name,
-        roleId: updateUserDto.roleId,
-      });
-
-      await this.usersRepository.update(existedUser, updatedUser);
-
-      return updatedUser;
-    }
-  }
-
-  async deleteUser(id: string) {
-    const existedUser = await this.usersRepository.findOne({
-      where: {
-        id: id,
-      },
-    });
-
-    if (!existedUser) {
+    } catch (error) {
+      console.log(error);
       return null;
     }
 
-    const deletingUser = { ...existedUser };
+    return null;
+  }
 
-    await this.usersRepository.remove(existedUser);
-    return deletingUser;
+  async updateUser(id: string, updateUserDto: UpdateUserDto) {
+    try {
+      const existedUser = await this.usersRepository.findOne({
+        where: {
+          id: id,
+        },
+      });
+
+      if (existedUser) {
+        const updatedUser = await this.usersRepository.create({
+          name: updateUserDto.name,
+          roleId: updateUserDto.roleId,
+        });
+
+        await this.usersRepository.update(existedUser, updatedUser);
+
+        return updatedUser;
+      }
+    } catch (error) {
+      return null;
+    }
+
+    return null;
+  }
+
+  async deleteUser(id: string) {
+    try {
+      const existedUser = await this.usersRepository.findOne({
+        where: {
+          id: id,
+        },
+      });
+
+      if (!existedUser) {
+        return null;
+      }
+
+      const deletingUser = { ...existedUser };
+
+      await this.usersRepository.remove(existedUser);
+      return deletingUser;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async updateRefreshToken(id: string, refreshToken: any) {
+    try {
+      const existedUser = await this.usersRepository.findOne({
+        where: {
+          id: id,
+        },
+      });
+
+      if (existedUser) {
+        await this.usersRepository.update(existedUser, {
+          refreshToken: refreshToken,
+        });
+
+        return existedUser;
+      }
+    } catch (error) {
+      return null;
+    }
+
+    return null;
   }
 }
