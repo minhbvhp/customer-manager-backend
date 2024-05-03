@@ -5,12 +5,14 @@ import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { NEW_USER_CREATED } from 'src/utils/messageConstants';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async signUp(createUserDto: CreateUserDto): Promise<{ result: string }> {
@@ -23,7 +25,9 @@ export class AuthService {
     return { result: NEW_USER_CREATED };
   }
 
-  async login(loginDto: LoginDto): Promise<{ token: string }> {
+  async login(
+    loginDto: LoginDto,
+  ): Promise<{ jwtToken: string; refreshToken: string }> {
     const result = await this.validateUser(loginDto.email, loginDto.password);
 
     if (result) {
@@ -33,12 +37,41 @@ export class AuthService {
         role: result?.role?.role,
       };
 
-      const token = await this.jwtService.signAsync(payload);
+      const tokens = await this.getTokens(
+        payload.sub,
+        payload.email,
+        payload.role,
+      );
 
-      return { token };
+      return tokens;
     }
 
     return null;
+  }
+
+  async getTokens(userId: string, email: string, role: string) {
+    const [jwtToken, refreshToken] = await Promise.all([
+      this.jwtService.signAsync(
+        { sub: userId, email, role },
+        {
+          secret: this.configService.get<string>('JWT_SECRET'),
+          expiresIn: this.configService.get<string>('JWT_EXPIRES'),
+        },
+      ),
+
+      this.jwtService.signAsync(
+        { sub: userId, email, role },
+        {
+          secret: this.configService.get<string>('REFRESH_SECRET'),
+          expiresIn: this.configService.get<string>('REFRESH_EXPIRES'),
+        },
+      ),
+    ]);
+
+    return {
+      jwtToken,
+      refreshToken,
+    };
   }
 
   async validateUser(email: string, inputPassword: string): Promise<any> {

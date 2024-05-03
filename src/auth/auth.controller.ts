@@ -35,7 +35,9 @@ export class AuthController {
 
   @Post('/login')
   @Public()
-  async login(@Body() loginDto: LoginDto): Promise<{ token: string }> {
+  async login(
+    @Body() loginDto: LoginDto,
+  ): Promise<{ jwtToken: string; refreshToken: string }> {
     const loginUser = await this.authService.login(loginDto);
 
     if (!loginUser) {

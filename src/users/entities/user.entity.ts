@@ -20,6 +20,13 @@ class User {
 
   @Column({ default: 2 })
   roleId: number;
+
+  @Column({
+    unique: true,
+    nullable: true,
+    select: false,
+  })
+  refreshToken: string;
 }
 
 export default User;
