@@ -6,6 +6,7 @@ import {
   Request,
   ConflictException,
   NotFoundException,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
@@ -15,6 +16,7 @@ import {
   EMAIL_OR_PASSWORD_WRONG,
   USER_ALREADY_EXISTED,
 } from 'src/utils/messageConstants';
+import { RefreshTokenDto } from 'src/auth/dto/refreshToken.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -49,6 +51,14 @@ export class AuthController {
 
   @Get('logout')
   async logout(@Request() req) {
-    return this.authService.logout(req.user['userId']);
+    return this.authService.logout(req?.user['userId']);
+  }
+
+  @Public()
+  @Post('refresh')
+  async refreshTokens(@Body() refreshTokenDto: RefreshTokenDto) {
+    console.log(refreshTokenDto);
+    // return 'ok';
+    // return this.authService.refreshTokens(req?.user);
   }
 }

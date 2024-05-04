@@ -5,7 +5,6 @@ import { Repository } from 'typeorm';
 import User from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
-import { UUID } from 'crypto';
 
 @Injectable()
 export class UsersService {
@@ -20,9 +19,7 @@ export class UsersService {
   }
 
   async getUserById(userId: string) {
-    console.log('Get id first time: ', userId);
     try {
-      console.log('Get id second time: ', userId);
       const user = await this.usersRepository.findOne({
         where: {
           id: userId,

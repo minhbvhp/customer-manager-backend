@@ -8,7 +8,6 @@ import {
   Delete,
   NotFoundException,
   ConflictException,
-  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -20,7 +19,6 @@ import {
 } from 'src/utils/messageConstants';
 import { Roles } from 'src/roles/roles.decorator';
 import { RoleEnum } from 'src/roles/role.enum';
-import { UUID } from 'crypto';
 
 @Roles(RoleEnum.Admin)
 @Controller('users')
@@ -35,7 +33,6 @@ export class UsersController {
 
   @Get(':id')
   async getUserById(@Param('id') id: string): Promise<User> {
-    console.log('Controller id: ', id);
     const user = await this.usersService.getUserById(id);
 
     if (!user) {

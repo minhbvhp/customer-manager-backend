@@ -29,7 +29,6 @@ import { RolesModule } from './roles/roles.module';
   ],
 
   controllers: [AppController],
-
   providers: [AppService, { provide: APP_GUARD, useClass: JwtAuthGuard }],
 })
 export class AppModule {}
