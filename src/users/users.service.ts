@@ -136,7 +136,6 @@ export class UsersService {
   }
 
   async updateRefreshToken(id: string, hashedRefreshToken: any) {
-    console.log(hashedRefreshToken);
     try {
       const existedUser = await this.usersRepository.findOne({
         where: {
@@ -145,12 +144,11 @@ export class UsersService {
       });
 
       if (existedUser) {
-        const result = await this.usersRepository.update(existedUser.id, {
+        await this.usersRepository.update(existedUser.id, {
           refreshToken: hashedRefreshToken,
         });
 
-        console.log(result);
-        return result;
+        return existedUser;
       }
     } catch (error) {
       return null;

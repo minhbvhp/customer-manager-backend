@@ -17,6 +17,7 @@ import {
   USER_ALREADY_EXISTED,
 } from 'src/utils/messageConstants';
 import { RefreshTokenDto } from 'src/auth/dto/refreshToken.dto';
+import { RefreshAuthGuard } from 'src/auth/refresh.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -54,10 +55,15 @@ export class AuthController {
     return this.authService.logout(req?.user['userId']);
   }
 
+  @UseGuards(RefreshAuthGuard)
   @Public()
   @Post('refresh')
-  async refreshTokens(@Body() refreshTokenDto: RefreshTokenDto) {
+  async refreshTokens(
+    @Body() refreshTokenDto: RefreshTokenDto,
+    @Request() req,
+  ) {
     console.log(refreshTokenDto);
+    console.log(req.user);
     return refreshTokenDto;
     // return 'ok';
     // return this.authService.refreshTokens(req?.user);
