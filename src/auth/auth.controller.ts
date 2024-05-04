@@ -58,6 +58,7 @@ export class AuthController {
   @Post('refresh')
   async refreshTokens(@Body() refreshTokenDto: RefreshTokenDto) {
     console.log(refreshTokenDto);
+    return refreshTokenDto;
     // return 'ok';
     // return this.authService.refreshTokens(req?.user);
   }
