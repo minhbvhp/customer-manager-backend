@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { NEW_USER_CREATED } from 'src/utils/messageConstants';
 import { ConfigService } from '@nestjs/config';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class AuthService {
@@ -52,26 +53,17 @@ export class AuthService {
   }
 
   async logout(userId: string) {
-    const user = await this.usersService.updateRefreshToken(userId, null);
+    const user = await this.usersService.updateSession(userId, null);
     return user;
-  }
-
-  async updateRefreshToken(userId: string, refreshToken: string) {
-    const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
-
-    await this.usersService.updateRefreshToken(userId, hashedRefreshToken);
   }
 
   async refreshTokens(userId: string, refreshToken: string) {
     const user = await this.usersService.getUserById(userId);
+    const inputSession = await this.getSessionFromRefreshToken(refreshToken);
 
-    if (user && user?.refreshToken) {
-      const refreshTokenMatches = await await bcrypt.compare(
-        user.refreshToken,
-        refreshToken,
-      );
-
-      if (refreshTokenMatches) {
+    if (user && user?.session && inputSession) {
+      const sessionMatches = await bcrypt.compare(inputSession, user?.session);
+      if (sessionMatches) {
         const tokens = await this.getTokens(
           user?.id,
           user?.email,
@@ -86,6 +78,9 @@ export class AuthService {
   }
 
   async getTokens(userId: string, email: string, role: string) {
+    //generate random crypto and add to refresh token payload
+    const session = crypto.randomBytes(10).toString('hex');
+
     const [jwtToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
         { sub: userId, email, role },
@@ -94,9 +89,8 @@ export class AuthService {
           expiresIn: this.configService.get<string>('JWT_EXPIRES'),
         },
       ),
-
       this.jwtService.signAsync(
-        { sub: userId, email, role },
+        { sub: userId, email, role, session },
         {
           secret: this.configService.get<string>('REFRESH_SECRET'),
           expiresIn: this.configService.get<string>('REFRESH_EXPIRES'),
@@ -108,6 +102,19 @@ export class AuthService {
       jwtToken,
       refreshToken,
     };
+  }
+
+  async updateRefreshToken(userId: string, refreshToken: string) {
+    const session = await this.getSessionFromRefreshToken(refreshToken);
+
+    await this.usersService.updateSession(userId, session);
+  }
+
+  async getSessionFromRefreshToken(refreshToken: string) {
+    const decodedJwt = await this.jwtService.decode(refreshToken);
+    const session = decodedJwt?.session;
+
+    return session;
   }
 
   async validateUser(email: string, inputPassword: string): Promise<any> {

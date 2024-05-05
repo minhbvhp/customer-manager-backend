@@ -135,7 +135,7 @@ export class UsersService {
     }
   }
 
-  async updateRefreshToken(id: string, hashedRefreshToken: any) {
+  async updateSession(id: string, session: string) {
     try {
       const existedUser = await this.usersRepository.findOne({
         where: {
@@ -144,8 +144,14 @@ export class UsersService {
       });
 
       if (existedUser) {
+        let hashedSession = null;
+
+        if (session) {
+          hashedSession = await bcrypt.hash(session, 10);
+        }
+
         await this.usersRepository.update(existedUser.id, {
-          refreshToken: hashedRefreshToken,
+          session: hashedSession,
         });
 
         return existedUser;

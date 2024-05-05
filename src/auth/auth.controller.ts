@@ -7,6 +7,7 @@ import {
   ConflictException,
   NotFoundException,
   UseGuards,
+  ForbiddenException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
@@ -14,6 +15,7 @@ import { Public } from 'src/auth/auth.decorators';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import {
   EMAIL_OR_PASSWORD_WRONG,
+  REFRESH_TOKEN_EXPIRES,
   USER_ALREADY_EXISTED,
 } from 'src/utils/messageConstants';
 import { RefreshTokenDto } from 'src/auth/dto/refreshToken.dto';
@@ -62,10 +64,16 @@ export class AuthController {
     @Body() refreshTokenDto: RefreshTokenDto,
     @Request() req,
   ) {
-    console.log(refreshTokenDto);
-    console.log(req.user);
-    return refreshTokenDto;
-    // return 'ok';
-    // return this.authService.refreshTokens(req?.user);
+    const newTokens = await this.authService.refreshTokens(
+      req?.user?.userId,
+      refreshTokenDto.refreshToken,
+    );
+
+    if (!newTokens) {
+      await this.authService.logout(req?.user?.userId);
+      throw new ForbiddenException(REFRESH_TOKEN_EXPIRES);
+    }
+
+    return newTokens;
   }
 }

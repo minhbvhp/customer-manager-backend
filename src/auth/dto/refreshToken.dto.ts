@@ -1,7 +1,7 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
-import {} from 'src/utils/messageConstants';
+import { IsNotEmpty } from 'class-validator';
+import { REFRESH_TOKEN_MUST_NOT_EMPTY } from 'src/utils/messageConstants';
 
 export class RefreshTokenDto {
-  @IsNotEmpty({ message: 'Token is not empty' })
+  @IsNotEmpty({ message: REFRESH_TOKEN_MUST_NOT_EMPTY })
   refreshToken: string;
 }

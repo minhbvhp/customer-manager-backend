@@ -25,7 +25,7 @@ class User {
     unique: true,
     nullable: true,
   })
-  refreshToken: string;
+  session: string;
 }
 
 export default User;
