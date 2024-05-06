@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import Province from 'src/addresses/entities/province.entity';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 
 @Entity()
 class AdministrativeRegion {
@@ -16,6 +17,9 @@ class AdministrativeRegion {
 
   @Column()
   code_name_en: string;
+
+  @OneToMany(() => Province, (province) => province.administrativeRegion)
+  provinces: Province[];
 }
 
 export default AdministrativeRegion;

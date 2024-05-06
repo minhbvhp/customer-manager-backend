@@ -1,4 +1,7 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import AdministrativeUnit from 'src/addresses/entities/administrativeUnit.entity';
+import Province from 'src/addresses/entities/province.entity';
+import Ward from 'src/addresses/entities/ward.entity';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 
 @Entity()
 class District {
@@ -19,6 +22,18 @@ class District {
 
   @Column()
   code_name: string;
+
+  @ManyToOne(() => Province, (province) => province.districts)
+  province: Province;
+
+  @ManyToOne(
+    () => AdministrativeUnit,
+    (administrativeUnit) => administrativeUnit.districts,
+  )
+  administrativeUnit: AdministrativeUnit;
+
+  @OneToMany(() => Ward, (ward) => ward.district)
+  wards: Ward[];
 }
 
 export default District;

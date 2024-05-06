@@ -9,7 +9,7 @@ import * as Joi from 'joi';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { RolesModule } from './roles/roles.module';
-import { AddressesModule } from './addresses/addresses.module';
+// import { AddressesModule } from './addresses/addresses.module';
 
 @Module({
   imports: [
@@ -27,7 +27,7 @@ import { AddressesModule } from './addresses/addresses.module';
     UsersModule,
     AuthModule,
     RolesModule,
-    AddressesModule,
+    // AddressesModule,
   ],
 
   controllers: [AppController],
