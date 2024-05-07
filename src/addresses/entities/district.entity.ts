@@ -32,7 +32,7 @@ class District {
   )
   administrativeUnit: AdministrativeUnit;
 
-  @OneToMany(() => Ward, (ward) => ward.district)
+  @OneToMany(() => Ward, (ward) => ward.district, { eager: true })
   wards: Ward[];
 }
 
