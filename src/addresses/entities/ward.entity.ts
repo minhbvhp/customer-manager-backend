@@ -1,6 +1,7 @@
 import AdministrativeUnit from 'src/addresses/entities/administrativeUnit.entity';
 import District from 'src/addresses/entities/district.entity';
-import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import Customer from 'src/customers/entities/customer.entity';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 
 @Entity()
 class Ward {
@@ -30,6 +31,9 @@ class Ward {
     (administrativeUnit) => administrativeUnit.wards,
   )
   administrativeUnit: AdministrativeUnit;
+
+  @OneToMany(() => Customer, (customer) => customer.ward)
+  customers: Customer[];
 }
 
 export default Ward;
