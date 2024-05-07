@@ -15,7 +15,7 @@ class Customer {
   @Column({ unique: true })
   taxCode: string;
 
-  @Column()
+  @Column({ nullable: true })
   urn: string;
 
   @Column()
@@ -27,7 +27,7 @@ class Customer {
   @DeleteDateColumn()
   deletedAt: Date;
 
-  @ManyToOne(() => Ward, (ward) => ward.customers)
+  @ManyToOne(() => Ward, (ward) => ward.customers, { eager: true })
   ward: Ward;
 }
 
