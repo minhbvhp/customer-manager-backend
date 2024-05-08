@@ -35,7 +35,7 @@ class Province {
   )
   administrativeUnit: AdministrativeUnit;
 
-  @OneToMany(() => District, (district) => district.province, { eager: true })
+  @OneToMany(() => District, (district) => district.province)
   districts: District[];
 }
 
