@@ -51,4 +51,20 @@ export class CustomersController {
 
     return newCustomer;
   }
+
+  @Patch(':id')
+  async updateCustomer(
+    @Param('id') id: string,
+    @Body() updateCustomerDto: UpdateCustomerDto,
+  ) {
+    const updatedCustomer = await this.customersService.updateCustomer(
+      Number(id),
+      updateCustomerDto,
+    );
+
+    if (!updatedCustomer) {
+      throw new NotFoundException(CUSTOMER_NOT_FOUND);
+    }
+    return updatedCustomer;
+  }
 }

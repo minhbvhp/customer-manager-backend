@@ -51,4 +51,35 @@ export class CustomersService {
       throw new ServiceUnavailableException();
     }
   }
+
+  async updateCustomer(id: number, updateCustomerDto: UpdateCustomerDto) {
+    try {
+      const existedCustomer = await this.customersRepository.findOne({
+        where: {
+          id: id,
+        },
+      });
+
+      if (existedCustomer) {
+        const updatedCustomer = await this.customersRepository.create({
+          taxCode: updateCustomerDto.taxCode,
+          urn: updateCustomerDto.urn,
+          fullName: updateCustomerDto.fullName,
+          street: updateCustomerDto.street,
+          wardCode: updateCustomerDto.wardCode,
+        });
+
+        await this.customersRepository.update(
+          existedCustomer.id,
+          updateCustomerDto,
+        );
+
+        return updatedCustomer;
+      }
+    } catch (error) {
+      throw new ServiceUnavailableException();
+    }
+
+    return null;
+  }
 }
