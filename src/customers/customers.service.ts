@@ -36,29 +36,19 @@ export class CustomersService {
 
   async createCustomer(createCustomerDto: CreateCustomerDto) {
     try {
-      const existedCustomer = await this.customersRepository.findOne({
-        where: {
-          taxCode: createCustomerDto.taxCode,
-        },
+      const newCustomer = await this.customersRepository.create({
+        taxCode: createCustomerDto.taxCode,
+        urn: createCustomerDto.urn,
+        fullName: createCustomerDto.fullName,
+        street: createCustomerDto.street,
+        wardCode: createCustomerDto.wardCode,
       });
 
-      if (!existedCustomer) {
-        const newCustomer = await this.customersRepository.create({
-          taxCode: createCustomerDto.taxCode,
-          urn: createCustomerDto.urn,
-          fullName: createCustomerDto.fullName,
-          street: createCustomerDto.street,
-        });
+      await this.customersRepository.insert(newCustomer);
 
-        await this.customersRepository.insert(newCustomer);
-
-        return newCustomer;
-      }
+      return newCustomer;
     } catch (error) {
-      console.log(error);
       throw new ServiceUnavailableException();
     }
-
-    return null;
   }
 }

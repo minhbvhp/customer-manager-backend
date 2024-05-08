@@ -12,7 +12,7 @@ class Customer {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column()
   taxCode: string;
 
   @Column({ nullable: true })
@@ -24,11 +24,14 @@ class Customer {
   @Column({ nullable: true })
   street: string;
 
-  @DeleteDateColumn()
-  deletedAt: Date;
+  @Column()
+  wardCode: string;
 
   @ManyToOne(() => Ward, (ward) => ward.customers)
   ward: Ward;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }
 
 export default Customer;
