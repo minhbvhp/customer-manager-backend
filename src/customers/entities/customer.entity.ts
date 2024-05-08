@@ -21,13 +21,13 @@ class Customer {
   @Column()
   fullName: string;
 
-  @Column()
+  @Column({ nullable: true })
   street: string;
 
   @DeleteDateColumn()
   deletedAt: Date;
 
-  @ManyToOne(() => Ward, (ward) => ward.customers, { eager: true })
+  @ManyToOne(() => Ward, (ward) => ward.customers)
   ward: Ward;
 }
 

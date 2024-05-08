@@ -6,12 +6,18 @@ import {
   Patch,
   Param,
   Delete,
+  NotFoundException,
+  ConflictException,
 } from '@nestjs/common';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import Customer from 'src/customers/entities/customer.entity';
 import { Public } from 'src/auth/auth.decorators';
+import {
+  CUSTOMER_ALREADY_EXISTED,
+  CUSTOMER_NOT_FOUND,
+} from 'src/utils/messageConstants';
 
 @Public()
 @Controller('customers')
@@ -22,5 +28,27 @@ export class CustomersController {
   async getAllCustomers(): Promise<Customer[]> {
     const customers = await this.customersService.getAllCustomers();
     return customers;
+  }
+
+  @Get(':id')
+  async getCustomerById(@Param('id') id: string): Promise<Customer> {
+    const customer = await this.customersService.getCustomerById(Number(id));
+
+    if (!customer) {
+      throw new NotFoundException(CUSTOMER_NOT_FOUND);
+    }
+    return customer;
+  }
+
+  @Post()
+  async createCustomer(@Body() createCustomerDto: CreateCustomerDto) {
+    const newCustomer =
+      await this.customersService.createCustomer(createCustomerDto);
+
+    if (!newCustomer) {
+      throw new ConflictException(CUSTOMER_ALREADY_EXISTED);
+    }
+
+    return newCustomer;
   }
 }

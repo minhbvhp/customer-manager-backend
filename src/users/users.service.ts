@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
@@ -26,14 +26,10 @@ export class UsersService {
         },
       });
 
-      if (user) {
-        return user;
-      }
+      return user;
     } catch (error) {
-      return null;
+      throw new ServiceUnavailableException();
     }
-
-    return null;
   }
 
   async getUserByEmail(email: string) {
@@ -48,14 +44,10 @@ export class UsersService {
         select: ['id', 'name', 'email', 'password', 'role', 'roleId'],
       });
 
-      if (user) {
-        return user;
-      }
+      return user;
     } catch (error) {
-      return null;
+      throw new ServiceUnavailableException();
     }
-
-    return null;
   }
 
   async createUser(createUserDto: CreateUserDto) {
@@ -83,7 +75,7 @@ export class UsersService {
       }
     } catch (error) {
       console.log(error);
-      return null;
+      throw new ServiceUnavailableException();
     }
 
     return null;
@@ -108,7 +100,7 @@ export class UsersService {
         return updatedUser;
       }
     } catch (error) {
-      return null;
+      throw new ServiceUnavailableException();
     }
 
     return null;
@@ -131,7 +123,7 @@ export class UsersService {
       await this.usersRepository.remove(existedUser);
       return deletingUser;
     } catch (error) {
-      return null;
+      throw new ServiceUnavailableException();
     }
   }
 
@@ -157,7 +149,7 @@ export class UsersService {
         return existedUser;
       }
     } catch (error) {
-      return null;
+      throw new ServiceUnavailableException();
     }
 
     return null;
