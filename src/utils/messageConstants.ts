@@ -17,6 +17,12 @@ export const REFRESH_TOKEN_EXPIRES: string =
   'Phiên đăng nhập đã hết, hãy đăng nhập lại';
 
 /**********
+ * @ROLE  *
+ **********/
+
+export const NOT_AUTHORIZED: string = 'Người dùng không có quyền này';
+
+/**********
  * @USER  *
  **********/
 

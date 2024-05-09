@@ -95,7 +95,7 @@ export class UsersService {
           roleId: updateUserDto.roleId,
         });
 
-        await this.usersRepository.update(existedUser, updatedUser);
+        await this.usersRepository.update(existedUser.id, updatedUser);
 
         return updatedUser;
       }
