@@ -1,5 +1,11 @@
 import Role from 'src/roles/roles.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 class User {
@@ -16,9 +22,10 @@ class User {
   password: string;
 
   @ManyToOne(() => Role, (role) => role.users)
+  @JoinColumn({ name: 'role_id' })
   role: Role;
 
-  @Column({ default: 2 })
+  @Column({ default: 2, name: 'role_id' })
   roleId: number;
 
   @Column({

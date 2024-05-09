@@ -3,6 +3,7 @@ import {
   Column,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -12,22 +13,23 @@ class Customer {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ name: 'tax_code' })
   taxCode: string;
 
   @Column({ nullable: true })
   urn: string;
 
-  @Column()
+  @Column({ name: 'full_name' })
   fullName: string;
 
   @Column({ nullable: true })
   street: string;
 
-  @Column()
+  @Column({ name: 'ward_code' })
   wardCode: string;
 
   @ManyToOne(() => Ward, (ward) => ward.customers)
+  @JoinColumn({ name: 'ward_code' })
   ward: Ward;
 
   @DeleteDateColumn({ name: 'deleted_at' })

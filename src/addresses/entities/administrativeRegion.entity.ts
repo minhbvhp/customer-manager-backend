@@ -9,14 +9,14 @@ class AdministrativeRegion {
   @Column()
   name: string;
 
-  @Column()
-  name_en: string;
+  @Column({ name: 'name_en' })
+  nameEn: string;
 
-  @Column()
-  code_name: string;
+  @Column({ name: 'code_name' })
+  codeName: string;
 
-  @Column()
-  code_name_en: string;
+  @Column({ name: 'code_name_en' })
+  codeNameEn: string;
 
   @OneToMany(() => Province, (province) => province.administrativeRegion)
   provinces: Province[];

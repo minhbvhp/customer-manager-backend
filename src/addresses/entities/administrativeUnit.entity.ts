@@ -8,23 +8,23 @@ class AdministrativeUnit {
   @PrimaryColumn()
   id: number;
 
-  @Column()
-  full_name: string;
+  @Column({ name: 'full_name' })
+  fullName: string;
 
-  @Column()
-  full_name_en: string;
+  @Column({ name: 'full_name_en' })
+  fullNameEn: string;
 
-  @Column()
-  short_name: string;
+  @Column({ name: 'short_name' })
+  shortName: string;
 
-  @Column()
-  short_name_en: string;
+  @Column({ name: 'short_name_en' })
+  shortNameEn: string;
 
-  @Column()
-  code_name: string;
+  @Column({ name: 'code_name' })
+  codeName: string;
 
-  @Column()
-  code_name_en: string;
+  @Column({ name: 'code_name_en' })
+  codeNameEn: string;
 
   @OneToMany(() => Province, (province) => province.administrativeUnit)
   provinces: Province[];
