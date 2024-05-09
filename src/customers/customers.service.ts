@@ -82,4 +82,25 @@ export class CustomersService {
 
     return null;
   }
+
+  async deleteCustomer(id: number) {
+    try {
+      const existedCustomer = await this.customersRepository.findOne({
+        where: {
+          id: id,
+        },
+      });
+
+      if (!existedCustomer) {
+        return null;
+      }
+
+      const deletingCustomer = { ...existedCustomer };
+
+      await this.customersRepository.softRemove(existedCustomer);
+      return deletingCustomer;
+    } catch (error) {
+      throw new ServiceUnavailableException();
+    }
+  }
 }

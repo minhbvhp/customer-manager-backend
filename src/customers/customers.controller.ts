@@ -67,4 +67,17 @@ export class CustomersController {
     }
     return updatedCustomer;
   }
+
+  @Delete(':id')
+  async deleteCustomer(@Param('id') id: string) {
+    const deletedCustomer = await this.customersService.deleteCustomer(
+      Number(id),
+    );
+
+    if (!deletedCustomer) {
+      throw new NotFoundException(CUSTOMER_NOT_FOUND);
+    }
+
+    return deletedCustomer;
+  }
 }

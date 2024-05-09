@@ -30,7 +30,7 @@ class Customer {
   @ManyToOne(() => Ward, (ward) => ward.customers)
   ward: Ward;
 
-  @DeleteDateColumn()
+  @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt: Date;
 }
 
