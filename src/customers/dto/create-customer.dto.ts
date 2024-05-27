@@ -6,18 +6,17 @@ import {
 } from 'src/utils/messageConstants';
 
 export class CreateCustomerDto {
-  @IsString()
-  @IsNotEmpty({ message: TAXCODE_MUST_NOT_EMPTY })
+  // @IsString()
   taxCode: string;
 
-  @IsString()
+  // @IsString()
   urn: string;
 
   @IsString()
   @IsNotEmpty({ message: FULLNAME_MUST_NOT_EMPTY })
   fullName: string;
 
-  @IsString()
+  // @IsString()
   street: string;
 
   @IsNotEmpty({ message: WARDCODE_MUST_NOT_EMPTY })

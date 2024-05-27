@@ -6,11 +6,12 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from 'src/database/database.module';
 import { AuthModule } from './auth/auth.module';
 import * as Joi from 'joi';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { RolesModule } from './roles/roles.module';
 import { AddressesModule } from './addresses/addresses.module';
 import { CustomersModule } from './customers/customers.module';
+import { HttpExceptionFilter } from 'src/filter/http-exception.filter';
 
 @Module({
   imports: [
@@ -33,6 +34,10 @@ import { CustomersModule } from './customers/customers.module';
   ],
 
   controllers: [AppController],
-  providers: [AppService, { provide: APP_GUARD, useClass: JwtAuthGuard }],
+  providers: [
+    AppService,
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
+    { provide: APP_FILTER, useValue: new HttpExceptionFilter() },
+  ],
 })
 export class AppModule {}

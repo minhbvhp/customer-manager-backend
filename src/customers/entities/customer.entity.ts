@@ -13,7 +13,7 @@ class Customer {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'tax_code' })
+  @Column({ name: 'tax_code', nullable: true })
   taxCode: string;
 
   @Column({ nullable: true })
