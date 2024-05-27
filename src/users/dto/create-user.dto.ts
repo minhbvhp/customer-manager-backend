@@ -13,7 +13,6 @@ import {
 } from 'src/utils/messageConstants';
 
 export class CreateUserDto {
-  @IsString()
   @IsNotEmpty({ message: NAME_MUST_NOT_EMPTY })
   name: string;
 

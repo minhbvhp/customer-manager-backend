@@ -10,12 +10,14 @@ export interface ErrorResponse {
   message: string;
   statusCode: HttpStatus;
 }
-@Catch(HttpException)
+@Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
+  private excludeHttpStatusList = [404, 400, 403];
+
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    let status = exception.getStatus();
+    const status = exception.getStatus();
 
     let errorResponse: ErrorResponse = {
       message: '',
@@ -30,12 +32,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
       case 500:
         errorResponse.message = 'Lỗi máy chủ';
         break;
-
-      default:
-        errorResponse.message = exception.message;
     }
 
-    //Finally Send the Modified Response
-    response.status(status).json(errorResponse);
+    if (this.excludeHttpStatusList.includes(status)) {
+      response.status(status).json(exception.getResponse());
+    } else {
+      response.status(status).json(errorResponse);
+    }
   }
 }

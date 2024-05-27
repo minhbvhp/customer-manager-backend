@@ -9,18 +9,13 @@ import {
 import { Exclude } from 'class-transformer';
 
 export class UpdateCustomerDto extends PartialType(CreateCustomerDto) {
-  @IsString()
-  @IsNotEmpty({ message: TAXCODE_MUST_NOT_EMPTY })
   taxCode: string;
 
-  @IsString()
   urn: string;
 
-  @IsString()
   @IsNotEmpty({ message: FULLNAME_MUST_NOT_EMPTY })
   fullName: string;
 
-  @IsString()
   street: string;
 
   @IsNotEmpty({ message: WARDCODE_MUST_NOT_EMPTY })
