@@ -49,7 +49,9 @@ export class CustomersController {
       throw new ConflictException(CUSTOMER_ALREADY_EXISTED);
     }
 
-    return newCustomer;
+    return {
+      message: 'Đã tạo khách hàng mới',
+    };
   }
 
   @Patch(':id')
