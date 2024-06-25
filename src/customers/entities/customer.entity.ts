@@ -8,6 +8,11 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+export type Contact = {
+  name: string;
+  phone: string;
+};
+
 @Entity()
 class Customer {
   @PrimaryGeneratedColumn()
@@ -24,6 +29,9 @@ class Customer {
 
   @Column({ nullable: true })
   street: string;
+
+  @Column({ type: 'jsonb', nullable: true })
+  contacts: Contact[];
 
   @Column({ name: 'ward_code' })
   wardCode: string;

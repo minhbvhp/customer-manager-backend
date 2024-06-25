@@ -41,6 +41,7 @@ export class CustomersService {
         urn: createCustomerDto.urn,
         fullName: createCustomerDto.fullName,
         street: createCustomerDto.street,
+        contacts: createCustomerDto.contacts,
         wardCode: createCustomerDto.wardCode,
       });
 
@@ -66,6 +67,7 @@ export class CustomersService {
           urn: updateCustomerDto.urn,
           fullName: updateCustomerDto.fullName,
           street: updateCustomerDto.street,
+          contacts: updateCustomerDto.contacts,
           wardCode: updateCustomerDto.wardCode,
         });
 
