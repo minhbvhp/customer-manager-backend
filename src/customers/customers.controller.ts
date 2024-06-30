@@ -67,7 +67,9 @@ export class CustomersController {
     if (!updatedCustomer) {
       throw new NotFoundException(CUSTOMER_NOT_FOUND);
     }
-    return updatedCustomer;
+    return {
+      message: 'Đã cập nhật thông tin khách hàng',
+    };
   }
 
   @Delete(':id')
@@ -80,6 +82,8 @@ export class CustomersController {
       throw new NotFoundException(CUSTOMER_NOT_FOUND);
     }
 
-    return deletedCustomer;
+    return {
+      message: 'Đã xóa khách hàng',
+    };
   }
 }
