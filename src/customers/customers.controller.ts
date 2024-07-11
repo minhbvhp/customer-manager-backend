@@ -19,7 +19,7 @@ import {
   CUSTOMER_NOT_FOUND,
 } from 'src/utils/messageConstants';
 
-@Public()
+// @Public()
 @Controller('customers')
 export class CustomersController {
   constructor(private readonly customersService: CustomersService) {}
