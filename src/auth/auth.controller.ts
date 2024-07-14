@@ -43,7 +43,7 @@ export class AuthController {
   @Public()
   async login(
     @Body() loginDto: LoginDto,
-  ): Promise<{ jwtToken: string; refreshToken: string }> {
+  ): Promise<{ accessToken: string; refreshToken: string }> {
     const loginUser = await this.authService.login(loginDto);
 
     if (!loginUser) {

@@ -28,7 +28,7 @@ export class AuthService {
 
   async login(
     loginDto: LoginDto,
-  ): Promise<{ jwtToken: string; refreshToken: string }> {
+  ): Promise<{ accessToken: string; refreshToken: string }> {
     const result = await this.validateUser(loginDto.email, loginDto.password);
 
     if (result) {
@@ -81,7 +81,7 @@ export class AuthService {
     //generate random crypto and add to refresh token payload
     const session = crypto.randomBytes(10).toString('hex');
 
-    const [jwtToken, refreshToken] = await Promise.all([
+    const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
         { sub: userId, email, role },
         {
@@ -99,7 +99,7 @@ export class AuthService {
     ]);
 
     return {
-      jwtToken,
+      accessToken,
       refreshToken,
     };
   }
