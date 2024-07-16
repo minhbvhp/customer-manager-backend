@@ -14,7 +14,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
   /**
    *
-   * @param payload{sub, email, role, iat, exp}
+   * @param payload{sub, email, name, role, iat, exp}
    *
    */
 
@@ -22,6 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     return {
       userId: payload.sub,
       email: payload.email,
+      name: payload.name,
       role: payload.role,
     };
   }

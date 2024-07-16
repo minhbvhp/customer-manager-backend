@@ -35,12 +35,14 @@ export class AuthService {
       const payload = {
         sub: result?.id,
         email: result?.email,
+        name: result?.name,
         role: result?.role?.role,
       };
 
       const tokens = await this.getTokens(
         payload.sub,
         payload.email,
+        payload.name,
         payload.role,
       );
 
@@ -67,6 +69,7 @@ export class AuthService {
         const tokens = await this.getTokens(
           user?.id,
           user?.email,
+          user?.name,
           user?.role?.role,
         );
         await this.updateRefreshToken(user.id, tokens.refreshToken);
@@ -77,13 +80,13 @@ export class AuthService {
     return null;
   }
 
-  async getTokens(userId: string, email: string, role: string) {
+  async getTokens(userId: string, email: string, name: string, role: string) {
     //generate random crypto and add to refresh token payload
     const session = crypto.randomBytes(10).toString('hex');
 
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
-        { sub: userId, email, role },
+        { sub: userId, email, role, name },
         {
           secret: this.configService.get<string>('JWT_SECRET'),
           expiresIn: this.configService.get<string>('JWT_EXPIRES'),
