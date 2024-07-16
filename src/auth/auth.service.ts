@@ -56,7 +56,7 @@ export class AuthService {
 
   async logout(userId: string) {
     const user = await this.usersService.updateSession(userId, null);
-    return user;
+    return { message: 'Đã đăng xuất thành công' };
   }
 
   async refreshTokens(userId: string, refreshToken: string) {
