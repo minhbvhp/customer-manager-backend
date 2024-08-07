@@ -12,6 +12,7 @@ import { RolesModule } from './roles/roles.module';
 import { AddressesModule } from './addresses/addresses.module';
 import { CustomersModule } from './customers/customers.module';
 import { HttpExceptionFilter } from 'src/filter/http-exception.filter';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -25,6 +26,26 @@ import { HttpExceptionFilter } from 'src/filter/http-exception.filter';
         PORT: Joi.number(),
       }),
     }),
+    ThrottlerModule.forRoot({
+      errorMessage: 'Thao tác quá nhanh, hãy thử lại',
+      throttlers: [
+        {
+          name: 'short',
+          ttl: 3000,
+          limit: 3,
+        },
+        {
+          name: 'medium',
+          ttl: 10000,
+          limit: 20,
+        },
+        {
+          name: 'long',
+          ttl: 60000,
+          limit: 100,
+        },
+      ],
+    }),
     DatabaseModule,
     UsersModule,
     AuthModule,
@@ -37,6 +58,7 @@ import { HttpExceptionFilter } from 'src/filter/http-exception.filter';
   providers: [
     AppService,
     { provide: APP_GUARD, useClass: JwtAuthGuard },
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
     { provide: APP_FILTER, useValue: new HttpExceptionFilter() },
   ],
 })
