@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsNumberString } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateUserDto } from './create-user.dto';
-import { Exclude } from 'class-transformer';
+import { Exclude, Transform } from 'class-transformer';
 import {
   NAME_MUST_NOT_EMPTY,
   PASSWORD_MUST_NOT_EMPTY,
@@ -9,6 +9,7 @@ import {
   ROLE_MUST_NOT_EMPTY,
   ROLE_MUST_NUMBER,
 } from 'src/utils/messageConstants';
+import { stringCleaner } from 'src/utils/stringCleaner';
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
   @Exclude()
@@ -18,6 +19,9 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   password?: string;
 
   @IsNotEmpty({ message: NAME_MUST_NOT_EMPTY })
+  @Transform(({ value }) => {
+    return stringCleaner(value);
+  })
   name: string;
 
   @IsNumberString({}, { message: ROLE_MUST_NUMBER })

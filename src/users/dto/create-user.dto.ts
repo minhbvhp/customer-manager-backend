@@ -1,9 +1,5 @@
-import {
-  IsNotEmpty,
-  IsEmail,
-  IsStrongPassword,
-  IsString,
-} from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsNotEmpty, IsEmail, IsStrongPassword } from 'class-validator';
 import {
   EMAIL_MUST_NOT_EMPTY,
   EMAIL_MUST_VALID,
@@ -11,9 +7,13 @@ import {
   PASSWORD_MUST_NOT_EMPTY,
   PASSWORD_NOT_STRONG,
 } from 'src/utils/messageConstants';
+import { stringCleaner } from 'src/utils/stringCleaner';
 
 export class CreateUserDto {
   @IsNotEmpty({ message: NAME_MUST_NOT_EMPTY })
+  @Transform(({ value }) => {
+    return stringCleaner(value);
+  })
   name: string;
 
   @IsEmail({}, { message: EMAIL_MUST_VALID })

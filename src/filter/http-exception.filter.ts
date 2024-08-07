@@ -12,7 +12,7 @@ export interface ErrorResponse {
 }
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
-  private excludeHttpStatusList = [404, 400, 403, 401];
+  private excludeHttpStatusList = [404, 400, 403, 401, 409];
 
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
