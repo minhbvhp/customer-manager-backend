@@ -13,11 +13,6 @@ async function bootstrap() {
 
   app.use(delay);
   app.use(helmet());
-  app.enableCors({
-    origin: ['http://example.com'],
-    methods: ['GET', 'POST'],
-    credentials: true,
-  });
 
   await app.listen(process.env.PORT || 8000);
 }
