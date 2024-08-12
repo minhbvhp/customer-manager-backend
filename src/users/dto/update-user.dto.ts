@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumberString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateUserDto } from './create-user.dto';
 import { Exclude, Transform } from 'class-transformer';
@@ -24,7 +24,8 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   })
   name: string;
 
-  @IsNumberString({}, { message: ROLE_MUST_NUMBER })
+  @IsOptional()
+  @IsNumber({}, { message: ROLE_MUST_NUMBER })
   @IsNotEmpty({ message: ROLE_MUST_NOT_EMPTY })
   roleId: number;
 }
