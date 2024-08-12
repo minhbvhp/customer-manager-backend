@@ -49,7 +49,9 @@ export class UsersController {
       throw new ConflictException(USER_ALREADY_EXISTED);
     }
 
-    return newUser;
+    return {
+      message: 'Đã tạo người dùng mới',
+    };
   }
 
   @Patch(':id')
@@ -62,7 +64,10 @@ export class UsersController {
     if (!updatedUser) {
       throw new NotFoundException(USER_NOT_FOUND);
     }
-    return updatedUser;
+
+    return {
+      message: 'Đã cập nhật thông tin người dùng',
+    };
   }
 
   @Delete(':id')
@@ -73,6 +78,8 @@ export class UsersController {
       throw new NotFoundException(USER_NOT_FOUND);
     }
 
-    return deletedUser;
+    return {
+      message: 'Đã xóa người dùng',
+    };
   }
 }
