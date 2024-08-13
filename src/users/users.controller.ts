@@ -19,6 +19,7 @@ import {
 } from 'src/utils/messageConstants';
 import { Roles } from 'src/roles/roles.decorator';
 import { RoleEnum } from 'src/roles/role.enum';
+import { ResetUserPasswordDto } from 'src/users/dto/reset-user-password.dto';
 
 @Roles(RoleEnum.Admin)
 @Controller('users')
@@ -80,6 +81,25 @@ export class UsersController {
 
     return {
       message: 'Đã xóa người dùng',
+    };
+  }
+
+  @Patch('reset/:id')
+  async resetUserPassword(
+    @Param('id') id: string,
+    @Body() resetUserPasswordDto: ResetUserPasswordDto,
+  ) {
+    const resetUserPassword = await this.usersService.resetPassword(
+      id,
+      resetUserPasswordDto?.password,
+    );
+
+    if (!resetUserPassword) {
+      throw new NotFoundException(USER_NOT_FOUND);
+    }
+
+    return {
+      message: 'Đã reset mật khẩu người dùng',
     };
   }
 }

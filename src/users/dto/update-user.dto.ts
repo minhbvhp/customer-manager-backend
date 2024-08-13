@@ -4,8 +4,6 @@ import { CreateUserDto } from './create-user.dto';
 import { Exclude, Transform } from 'class-transformer';
 import {
   NAME_MUST_NOT_EMPTY,
-  PASSWORD_MUST_NOT_EMPTY,
-  PASSWORD_NOT_STRONG,
   ROLE_MUST_NOT_EMPTY,
   ROLE_MUST_NUMBER,
 } from 'src/utils/messageConstants';

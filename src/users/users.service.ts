@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import User from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
+import { ResetUserPasswordDto } from 'src/users/dto/reset-user-password.dto';
 
 @Injectable()
 export class UsersService {
@@ -148,6 +149,33 @@ export class UsersService {
         return existedUser;
       }
     } catch (error) {
+      throw new ServiceUnavailableException();
+    }
+
+    return null;
+  }
+
+  async resetPassword(id: string, newPassword: string) {
+    try {
+      const existedUser = await this.usersRepository.findOne({
+        where: {
+          id: id,
+        },
+      });
+
+      if (existedUser) {
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        const resetUserPassword = await this.usersRepository.create({
+          password: hashedPassword,
+        });
+
+        await this.usersRepository.update(existedUser.id, resetUserPassword);
+
+        return resetUserPassword;
+      }
+    } catch (error) {
+      console.log(error);
       throw new ServiceUnavailableException();
     }
 
