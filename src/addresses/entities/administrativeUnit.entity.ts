@@ -1,4 +1,3 @@
-import District from 'src/addresses/entities/district.entity';
 import Province from 'src/addresses/entities/province.entity';
 import Ward from 'src/addresses/entities/ward.entity';
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
@@ -28,9 +27,6 @@ class AdministrativeUnit {
 
   @OneToMany(() => Province, (province) => province.administrativeUnit)
   provinces: Province[];
-
-  @OneToMany(() => District, (district) => district.administrativeUnit)
-  districts: District[];
 
   @OneToMany(() => Ward, (ward) => ward.administrativeUnit)
   wards: Ward[];

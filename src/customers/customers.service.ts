@@ -14,7 +14,7 @@ export class CustomersService {
 
   async getAllCustomers() {
     const customers = await this.customersRepository.find({
-      relations: ['ward.district.province'],
+      relations: ['ward.province'],
     });
     return customers;
   }
@@ -25,7 +25,7 @@ export class CustomersService {
         where: {
           id: customerId,
         },
-        relations: ['ward.district.province'],
+        relations: ['ward.province'],
       });
 
       return customers;

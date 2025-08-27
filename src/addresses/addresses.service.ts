@@ -12,7 +12,7 @@ export class AddressesService {
 
   async findAllProvinces() {
     const provinces = await this.provinceRepository.find({
-      relations: ['districts.wards'],
+      relations: ['wards'],
     });
     return provinces;
   }

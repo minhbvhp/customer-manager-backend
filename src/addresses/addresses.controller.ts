@@ -1,15 +1,7 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
-import { AddressesService } from './addresses.service';
+import { Controller, Get } from '@nestjs/common';
 import Province from 'src/addresses/entities/province.entity';
 import { Public } from 'src/auth/auth.decorators';
+import { AddressesService } from './addresses.service';
 
 @Public()
 @Controller('addresses')
